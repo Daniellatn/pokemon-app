@@ -1,35 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
-import { Card } from 'react-native-paper'; 
-import { addFavorite, getFavorites } from '../../util/storage'
+import React, { useCallback, useState } from 'react';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import listCardPokeStyles from '../../styles/listCardPokeStyles';
+import CardPoke from '../../components/CardPoke';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
 const Favorites = ({ navigation }) => {
   const [favorites, setFavorites] = useState([]);
 
-  useEffect(() => {
-    getFavorites().then((fav) => setFavorites(fav));
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getFavorites()
+    }, [])
+  )
 
+  function getFavorites() {
+    AsyncStorage.getItem('pokemon').then(result => {
+      result = JSON.parse(result) || []
+      setFavorites(result)
+    })
+  }
+  
   return (
-    <View>
-      <Text>Minha Lista de Favoritos</Text>
-      <FlatList
-        data={favorites}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Card>
-            {/* Renderize os dados do Pokémon favorito */}
-            <Card.Title title={item.name} />
-          </Card>
-        )}
-      />
-      <Button
-        title="Voltar para a lista de Pokémon"
-        onPress={() => navigation.navigate('list-pokemon')}
-      />
-    </View>
+    <>
+      <ScrollView>
+        <View style={listCardPokeStyles.container}>
+          {favorites.map(item => (
+            <TouchableOpacity key={item.id} onPress={() => navigation.push('details-pokemon', { id: item.id, type: item.types[0].type.name })}>
+              <CardPoke key={item.id} infos={item}></CardPoke>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+
+    </>
   );
 };
 

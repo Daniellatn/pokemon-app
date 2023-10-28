@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ListPokemon from "./ListPokemon";
-import DetalhesPoke from "./DetalhesPoke";
+import DetailsPokemon from "./DetailsPokemon"
 
 const Stack = createNativeStackNavigator();
 
@@ -9,7 +9,7 @@ const StackPokemon = () => {
     <>
       <Stack.Navigator>
         <Stack.Screen name="list-pokemon" component={ListPokemon} options={{ title: 'Pokémon' }} />
-        <Stack.Screen name="Detalhes-Poke" component={DetalhesPoke} options={{ title: 'Pokémon' }} />
+        <Stack.Screen name="details-pokemon" component={DetailsPokemon} options={{ title: 'Detalhes Pokémon' }} />
       </Stack.Navigator>
     </>
   )

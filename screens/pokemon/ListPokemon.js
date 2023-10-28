@@ -1,16 +1,32 @@
-import { ActivityIndicator, Button, Card, Text } from "react-native-paper"
-import { Image, ScrollView, StyleSheet, TouchableOpacity } from "react-native"
-import apiPoke from "../../services/apiPoke"
 import { useEffect, useState } from "react"
-import { View } from "react-native"
-import gamesPageStyles from "../../styles/gamesPageStyles"
-import cardPokeStyles from "../../styles/cardPokeStyles"
-import COLORS from "../../util/colorsTypePoke"
+import { ScrollView, TouchableOpacity, View } from "react-native"
+import CardPoke from "../../components/CardPoke"
+import listCardPokeStyles from "../../styles/listCardPokeStyles"
+import apiPoke from "../../services/apiPoke"
+
 
 const ListPokemon = ({ navigation }) => {
 
-  const [pokemons, setPokemons] = useState([]);
+  const [pokemons, setpokemons] = useState([])
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    //getAllPokemon()
+    loadMorePokemons()
+  }, [])
+
+  function getAllPokemon() {
+    apiPoke.get('/pokemon').then(async (resultado) => {
+      const pokemonList = resultado.data.results
+      const detailsPokemonList = await Promise.all(
+        pokemonList.map(async (pokemon) => {
+          const response = await apiPoke.get("/pokemon/" + pokemon.name);
+          return response.data
+        })
+      )
+      setpokemons(detailsPokemonList)
+    })
+  }
 
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -41,7 +57,7 @@ const ListPokemon = ({ navigation }) => {
         })
       );
 
-      setPokemons((prevPokemons) => [...prevPokemons, ...detailedPokemonList]);
+      setpokemons((prevPokemons) => [...prevPokemons, ...detailedPokemonList]);
     } catch (error) {
       console.error('Error loading more pokémons', error);
     } finally {
@@ -49,38 +65,20 @@ const ListPokemon = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    loadMorePokemons();
-  }, []);
-
-  const getBackgroundColor = (pokemon) => {
-    if (pokemon.types && pokemon.types.length > 0) {
-      const primaryType = pokemon.types[0].type.name;
-      return { backgroundColor: COLORS[primaryType] || '#000000' };
-    }
-    return { backgroundColor: '#000000' };
-  };
-
   return (
-    <ScrollView showsVerticalScrollIndicator={false} onScroll={handleScroll}>
-      <View style={gamesPageStyles.container}>
-        {pokemons.map((item) => (
-          <TouchableOpacity key={item.id} onPress={() => navigation.push('Detalhes-Poke', { id: item.name ,type: item.types[0].type.name})}>
-            <View key={item.id}>
-              <Card style={[cardPokeStyles.card, getBackgroundColor(item)]}>
-                {item.sprites && (
-                  <Card.Cover source={{ uri: item.sprites.other.home.front_default }} style={cardPokeStyles.image} />
-                )}
-                <Text variant="titleLarge" style={{textAlign:'center'}}>{item.name}</Text>
-              </Card>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-         {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
-    </ScrollView>
+    <>
+      <ScrollView showsVerticalScrollIndicator={false} onScroll={handleScroll}>
+        <View style={listCardPokeStyles.container}>
+          {pokemons.map((item, i) => (
+            <TouchableOpacity key={item.id} onPress={() => navigation.push('details-pokemon', { id: item.id, type: item.types[0].type.name })}>
+              <CardPoke key={i} infos={item}></CardPoke>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+
+    </>
   )
-}
+ }
 
 export default ListPokemon
-

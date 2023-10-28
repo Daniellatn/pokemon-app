@@ -16,11 +16,15 @@ const cardDetailsPokeStyles = StyleSheet.create({
   title: {
     fontWeight: "bold",
   },
-
   text: {
     fontWeight: "bold",
     textAlign: 'center',
     fontSize: 15,
+  },
+  favorite: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   }
 })
 

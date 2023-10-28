@@ -16,7 +16,9 @@ const COLORS = {
   psychic: '#FB5584',
   rock: '#B69E31',
   steel: '#B7B9D0',
-  water: '#6493EB'
+  water: '#6493EB',
+  easy: '#32ABF1',
+  medium: '#F9CF00',
+  hard: '#ED4548'
 }
-
 export default COLORS;
