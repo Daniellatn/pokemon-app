@@ -15,18 +15,23 @@ const ListPokemon = ({ navigation }) => {
     loadMorePokemons()
   }, [])
 
-  function getAllPokemon() {
-    apiPoke.get('/pokemon').then(async (resultado) => {
-      const pokemonList = resultado.data.results
-      const detailsPokemonList = await Promise.all(
-        pokemonList.map(async (pokemon) => {
-          const response = await apiPoke.get("/pokemon/" + pokemon.name);
-          return response.data
-        })
-      )
-      setpokemons(detailsPokemonList)
-    })
+  function addPokemon(data) {
+    AsyncStorage.getItem('pokemon').then(result => {
+      const pokemon = JSON.parse(result) || [];
+  
+      // Verificar se o Pokémon já existe no array
+      const isDuplicate = pokemon.some(p => p.name === data.name);
+  
+      if (!isDuplicate) {
+        pokemon.push(data);
+        AsyncStorage.setItem('pokemon', JSON.stringify(pokemon));
+      } else {
+        // Lidar com o caso de tentativa de adicionar um Pokémon duplicado
+        console.log('Este Pokémon já está na lista.');
+      }
+    });
   }
+  
 
   const handleScroll = (event) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;

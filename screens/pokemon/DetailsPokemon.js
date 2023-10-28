@@ -24,11 +24,21 @@ const DetailsPokemon = ({ route }) => {
 
   function addPokemon(data) {
     AsyncStorage.getItem('pokemon').then(result => {
-      const pokemon = JSON.parse(result) || []
-      pokemon.push(data)
-      AsyncStorage.setItem('pokemon', JSON.stringify(pokemon))
-    })
+      const pokemon = JSON.parse(result) || [];
+  
+      // Verificar se o Pokémon já existe no array
+      const isDuplicate = pokemon.some(p => p.name === data.name);
+  
+      if (!isDuplicate) {
+        pokemon.push(data);
+        AsyncStorage.setItem('pokemon', JSON.stringify(pokemon));
+      } else {
+        // Lidar com o caso de tentativa de adicionar um Pokémon duplicado
+        console.log('Este Pokémon já está na lista.');
+      }
+    });
   }
+  
 
   return (
     <>
