@@ -1,17 +1,17 @@
 const levelMemoryGame = {
   EASY: {
     name: "Fácil",
-    quantity: 6,
+    quantity: 12,
     description: 'easy'
   },
   MEDIUM: {
     name: "Médio",
-    quantity: 12,
+    quantity: 18,
     description: 'medium'
   },
   HARD: {
     name: "Difícil",
-    quantity: 18,
+    quantity: 24,
     description: 'hard'
   }
 }
