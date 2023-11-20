@@ -89,11 +89,7 @@ const MemoryGame = ({ navigation, route }) => {
         ret += mins.toFixed(0) + ' minuto(s) e ';
         secs = secs - 60 * parseInt(mins.toFixed(0));
       }
-      ret += secs.toFixed(0) + ' segundos e ';
-
-      ret +=
-        parseFloat(secs.toString().split('.')[1]).toFixed(0) + ' milésimos';
-
+      ret += secs.toFixed(0) + ' segundos.';
       return ret;
     }
 
