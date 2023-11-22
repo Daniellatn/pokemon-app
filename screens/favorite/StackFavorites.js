@@ -8,8 +8,8 @@ const StackFavorites = () => {
   return (
     <>
       <Stack.Navigator>
-      <Stack.Screen name="list-favorites" component={Favorites} options={{ title: 'Favoritos' }} />
-      <Stack.Screen name="details-pokemon" component={DetailsPokemon} options={{ title: 'Detalhes Pokémons' }} />
+        <Stack.Screen name="list-favorites" component={Favorites} options={{ title: 'Favoritos' }} />
+        <Stack.Screen name="details-pokemon" component={DetailsPokemon} options={{ title: 'Detalhes Pokémons' }} />
       </Stack.Navigator>
     </>
   )

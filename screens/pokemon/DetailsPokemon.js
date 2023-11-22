@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Card, IconButton, Text } from "react-native-paper";
+import { Button, Card, IconButton, List, ProgressBar, Text } from "react-native-paper";
 import apiPoke from "../../services/apiPoke";
-import { Image, View } from "react-native";
+import { Image, ScrollView, View } from "react-native";
 import COLORS from "../../util/colorsTypePoke";
 import cardDetailsPokeStyles from "../../styles/cardDetailsPokeStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +10,8 @@ const DetailsPokemon = ({ route }) => {
   const [details, setDetails] = useState({});
   const [isFavorite, setIsFavorite] = useState(false);
   const type = route.params.type;
+  const [expanded, setExpanded] = useState(false);
+  const handlePress = () => setExpanded(!expanded);
 
   useEffect(() => {
     const id = route.params.id;
@@ -55,28 +57,77 @@ const DetailsPokemon = ({ route }) => {
 
   return (
     <>
-      <View style={{ backgroundColor: COLORS[type] }} >
-        <View style={cardDetailsPokeStyles.favorite} >
-          <Text> Nº  {details.id}</Text>
-          <IconButton
-            icon={isFavorite ? "cards-heart" : "cards-heart-outline"}
-            color={isFavorite ? "red" : "black"}
-            onPress={() => addPokemon(details)}
-          />
+      <ScrollView>
+        <View style={{ backgroundColor: COLORS[type] }} >
+          <View style={cardDetailsPokeStyles.favorite} >
+            <Text> Nº  {details.id}</Text>
+            <IconButton
+              icon={isFavorite ? "cards-heart" : "cards-heart-outline"}
+              onPress={() => addPokemon(details)}
+            />
+          </View>
+          <View style={cardDetailsPokeStyles.card}>
+            <Image source={{ uri: details.sprites?.other?.home?.front_default }} style={cardDetailsPokeStyles.image} />
+          </View>
+          <Text style={{ color: 'black', textAlign: 'center', fontSize: 25, padding: 10 }}>{details.name}</Text>
         </View>
-        <View style={cardDetailsPokeStyles.card}>
-          <Image source={{ uri: details.sprites?.other?.home?.front_default }} style={cardDetailsPokeStyles.image} />
+        <View style={{ flex: 3 }}>
+          <List.Section >
+            <List.Accordion
+              title="Sobre"
+              left={props => <List.Icon {...props} icon="pokeball" />}>
+              {details.abilities?.map(item => (
+                <Card.Title
+                  title={item.ability?.name}
+
+                  right={(props) => <IconButton {...props} icon="check" />}
+                />
+              ))}
+
+            </List.Accordion>
+
+            <List.Accordion
+              title="Estatistica "
+              left={props => <List.Icon {...props} icon="pokeball" />}
+              expanded={expanded}
+              onPress={handlePress}>
+              {details.stats?.map(item => (
+                <View style={{ marginLeft: 0 }}>
+                  <Text>{item.stat?.name} - {item.base_stat} </Text>
+                  <ProgressBar progress={item.base_stat / 100} color='blue' />
+                </View>
+              ))}
+            </List.Accordion>
+
+            <List.Accordion
+              title="Habilidades"
+              left={props => <List.Icon {...props} icon="pokeball" />}>
+              {details.abilities?.map(item => (
+                <Card.Title
+                  title={item.ability?.name}
+
+                  right={(props) => <IconButton {...props} icon="check" />}
+                />
+              ))}
+
+            </List.Accordion>
+
+            <List.Accordion
+              title="Evoluções"
+              left={props => <List.Icon {...props} icon="pokeball" />}>
+              {details.abilities?.map(item => (
+                <Card.Title
+                  title={item.ability?.name}
+
+                  right={(props) => <IconButton {...props} icon="check" />}
+                />
+              ))}
+
+            </List.Accordion>
+          </List.Section>
         </View>
-        <Text style={{ color: 'black', textAlign: 'center', fontSize: 25, padding: 10 }}>{details.name}</Text>
-      </View>
-      <Card style={{ margin: 10 }}>
-        <Card.Actions>
-          <Button>Sobre</Button>
-          <Button>Estatistica</Button>
-          <Button>Habilidade</Button>
-        </Card.Actions>
-        <Text>{details.evolves_from_species}</Text>
-      </Card>
+      </ScrollView>
+
     </>
   );
 }
