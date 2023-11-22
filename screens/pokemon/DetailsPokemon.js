@@ -14,8 +14,9 @@ const DetailsPokemon = ({ route }) => {
   const handlePress = () => setExpanded(!expanded);
 
   useEffect(() => {
-    const id = route.params.id;
-    getDetails(id);
+    const id = route.params.id
+    getDetails(id)
+    
   }, []);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const DetailsPokemon = ({ route }) => {
       <ScrollView>
         <View style={{ backgroundColor: COLORS[type] }} >
           <View style={cardDetailsPokeStyles.favorite} >
-            <Text> Nº  {details.id}</Text>
+            <Text style={cardDetailsPokeStyles.text}> Nº  {details.id}</Text>
             <IconButton
               icon={isFavorite ? "cards-heart" : "cards-heart-outline"}
               onPress={() => addPokemon(details)}
@@ -69,20 +70,20 @@ const DetailsPokemon = ({ route }) => {
           <View style={cardDetailsPokeStyles.card}>
             <Image source={{ uri: details.sprites?.other?.home?.front_default }} style={cardDetailsPokeStyles.image} />
           </View>
-          <Text style={{ color: 'black', textAlign: 'center', fontSize: 25, padding: 10 }}>{details.name}</Text>
+          <Text style={cardDetailsPokeStyles.textCard}>{details.name?.toUpperCase()}</Text>
         </View>
         <View style={{ flex: 3 }}>
           <List.Section >
             <List.Accordion
-              title="Sobre"
+              title="Tipos"
               left={props => <List.Icon {...props} icon="pokeball" />}>
-              {details.abilities?.map(item => (
-                <Card.Title
-                  title={item.ability?.name}
-
-                  right={(props) => <IconButton {...props} icon="check" />}
-                />
-              ))}
+              <Card style={cardDetailsPokeStyles.cardType}>
+                {details.types?.map(item => (
+                  <View style={[cardDetailsPokeStyles.type, {backgroundColor: COLORS[item.type.name]}]}>
+                    <Text style={cardDetailsPokeStyles.textType}>{item.type.name}</Text>
+                  </View>
+                ))}
+              </Card>
 
             </List.Accordion>
 
@@ -101,19 +102,6 @@ const DetailsPokemon = ({ route }) => {
 
             <List.Accordion
               title="Habilidades"
-              left={props => <List.Icon {...props} icon="pokeball" />}>
-              {details.abilities?.map(item => (
-                <Card.Title
-                  title={item.ability?.name}
-
-                  right={(props) => <IconButton {...props} icon="check" />}
-                />
-              ))}
-
-            </List.Accordion>
-
-            <List.Accordion
-              title="Evoluções"
               left={props => <List.Icon {...props} icon="pokeball" />}>
               {details.abilities?.map(item => (
                 <Card.Title

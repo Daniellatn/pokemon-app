@@ -55,7 +55,6 @@ const memoryGameStyles = StyleSheet.create({
   resultText: {
     textAlign: 'center',
     fontSize: 30,
-    marginVertical: 20,
   },
 })
 

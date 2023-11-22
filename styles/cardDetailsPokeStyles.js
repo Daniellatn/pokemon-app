@@ -7,12 +7,18 @@ const cardDetailsPokeStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
+  textCard: {
+    color: 'black', 
+    textAlign: 'center', 
+    fontSize: 25, 
+    padding: 10, 
+    fontWeight: 'bold'
+  },
   image: {
     width: 180,
     height: 180,
     alignItems: "center",
   },
-
   title: {
     fontWeight: "bold",
   },
@@ -24,7 +30,20 @@ const cardDetailsPokeStyles = StyleSheet.create({
   favorite: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    margin: 10
+  },
+  type: {
+    width: 100,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 5,
+    borderRadius: 10
+  },
+  textType: {
+    color: 'white',
+    fontWeight: "bold",
   }
 })
 
