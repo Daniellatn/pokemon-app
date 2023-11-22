@@ -20,7 +20,6 @@ const DetailsPokemon = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    // Check if the current Pokémon is already in favorites
     AsyncStorage.getItem('pokemon').then(result => {
       const pokemon = JSON.parse(result) || [];
       const isAlreadyFavorite = pokemon.some(p => p.id === details.id);
